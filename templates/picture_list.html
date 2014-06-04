@@ -1,0 +1,203 @@
+<!-- ******************************************************************* -->
+<!-- *                                                                 * -->
+<!-- *  picture_list.html                                              * -->
+<!-- *  (c)2014 Jorge Marcos Fernandez                                 * -->
+<!-- *                                                                 * -->
+<!-- *  Description: JMFDjangoUTad Project                             * -->
+<!-- *               Picture List HTML Template File                   * -->
+<!-- *               Practica Asignatura Backend de U-Tad              * -->
+<!-- *               www.u-tad.com                                     * -->
+<!-- *                                                                 * -->
+<!-- *  Author:      Jorge Marcos Fernandez                            * -->
+<!-- *                                                                 * -->
+<!-- ******************************************************************* -->
+{% extends "base.html" %}
+
+<!-- ******************************************************************* -->
+<!-- *                                                                 * -->
+<!-- *                                                                 * -->
+<!-- * Title Block                                                     * -->
+<!-- *                                                                 * -->
+<!-- *                                                                 * -->
+<!-- ******************************************************************* -->
+{% block title %}Pictures{% endblock %}
+
+<!-- ******************************************************************* -->
+<!-- *                                                                 * -->
+<!-- *                                                                 * -->
+<!-- * Content Block                                                   * -->
+<!-- *                                                                 * -->
+<!-- *                                                                 * -->
+<!-- ******************************************************************* -->
+{% block content %}
+    <div id="content" class="flex">
+
+        <!-- *********************************************************** -->
+        <!-- *                                                         * -->
+        <!-- * Public Pictures                                         * -->
+        <!-- *                                                         * -->
+        <!-- *********************************************************** -->
+        <h1>Public Pictures</h1>
+
+        <div id="public-content-main">
+            <div id="changelist">
+                <!-- *************************************************** -->
+                <!-- * Form Block                                      * -->
+                <!-- *************************************************** -->
+                <form id="public-changelist-form" action="" method="post">
+                    <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}'/>
+
+                    <!-- *********************************************** -->
+                    <!-- * Table Block                                 * -->
+                    <!-- *********************************************** -->
+                    <div class="results">
+                        <table id="public-result-list">
+
+                            <!-- *************************************** -->
+                            <!-- * Table Header                        * -->
+                            <!-- *************************************** -->
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="sortable column-title">
+                                        <div class="text"><a href="?o=1.-4">Title</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                    <th scope="col" class="sortable column-url">
+                                        <div class="text"><a href="?o=2.-4">Url</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                    <th scope="col" class="sortable column-coordinates">
+                                        <div class="text"><a href="?o=3.-4">Coordinates</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                    <th scope="col" class="sortable column-modificationDate sorted descending">
+                                        <div class="sortoptions">
+                                            <a class="sortremove" href="?o=" title="Remove from sorting"></a>
+                                            <a href="?o=4" class="toggle descending" title="Toggle sorting"></a>
+                                        </div>
+                                        <div class="text"><a href="?o=4">Modification Date</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                    <th scope="col" class="sortable column-user">
+                                        <div class="text"><a href="?o=5.-4">User</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <!-- *************************************** -->
+                            <!-- * Table Body                          * -->
+                            <!-- *************************************** -->
+                            <tbody>
+                                {% for Picture in PublicPictureList %}
+                                    <tr class="row{{ forloop.counter }}">
+                                        <th>{{ Picture.title }}</th>
+                                        <td><a href="{{ Picture.url }}">{{ Picture.url }}</a></td>
+                                        <td>{{ Picture.coordinates }}</td>
+                                        <td class="nowrap">{{ Picture.modificationDate }}</td>
+                                        <td class="nowrap">{{ Picture.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <!-- *********************************************** -->
+                    <!-- * Table Footer                                * -->
+                    <!-- *********************************************** -->
+                    <p class="paginator">{{ PublicPictureList|length }} picture{{ PublicPictureList|length|pluralize }}</p>
+                </form>
+            </div>
+            <br class="clear" />
+        </div>
+
+        <!-- *********************************************************** -->
+        <!-- *                                                         * -->
+        <!-- * Authenticated User Own Pictures                         * -->
+        <!-- *                                                         * -->
+        <!-- *********************************************************** -->
+        {% if RequestUser != None %}
+        <br class="clear" />
+        <h1>{{ RequestUser.username|capfirst }} Pictures</h1>
+
+        <div id="own-content-main">
+            <div id="changelist">
+                <!-- *************************************************** -->
+                <!-- * Form Block                                      * -->
+                <!-- *************************************************** -->
+                <form id="own-changelist-form" action="" method="post">
+                    <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}'/>
+
+                    <!-- *********************************************** -->
+                    <!-- * Table Block                                 * -->
+                    <!-- *********************************************** -->
+                    <div class="results">
+                        <table id="own-result-list">
+
+                            <!-- *************************************** -->
+                            <!-- * Table Header                        * -->
+                            <!-- *************************************** -->
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="sortable column-title">
+                                        <div class="text"><a href="?o=1.-4">Title</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                    <th scope="col" class="sortable column-url">
+                                        <div class="text"><a href="?o=2.-4">Url</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                    <th scope="col" class="sortable column-coordinates">
+                                        <div class="text"><a href="?o=3.-4">Coordinates</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                    <th scope="col" class="sortable column-modificationDate sorted descending">
+                                        <div class="sortoptions">
+                                            <a class="sortremove" href="?o=" title="Remove from sorting"></a>
+                                            <a href="?o=4" class="toggle descending" title="Toggle sorting"></a>
+                                        </div>
+                                        <div class="text"><a href="?o=4">Modification Date</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                    <th scope="col" class="sortable column-isPublic">
+                                        <div class="text"><a href="?o=5.-4">IsPublic</a></div>
+                                        <div class="clear"></div>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <!-- *************************************** -->
+                            <!-- * Table Body                          * -->
+                            <!-- *************************************** -->
+                            <tbody>
+                                {% for Picture in OwnPictureList %}
+                                    <tr class="row{{ forloop.counter }}">
+                                        <th><a href="/admin/Pictures/picture/{{ forloop.counter }}/">{{ Picture.title }}</a></th>
+                                        <td><a href="{{ Picture.url }}">{{ Picture.url }}</a></td>
+                                        <td>{{ Picture.coordinates }}</td>
+                                        <td class="nowrap">{{ Picture.modificationDate }}</td>
+                                        {% if Picture.isPublic == True %}
+                                            <td><img src="/static/admin/img/icon-yes.gif" alt="True" /></td>
+                                        {% else %}
+                                            <td><img src="/static/admin/img/icon-no.gif" alt="True" /></td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <!-- *********************************************** -->
+                    <!-- * Table Footer                                * -->
+                    <!-- *********************************************** -->
+                    <p class="paginator">{{ OwnPictureList|length }} picture{{ OwnPictureList|length|pluralize }}</p>
+                </form>
+            </div>
+            <br class="clear" />
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
+

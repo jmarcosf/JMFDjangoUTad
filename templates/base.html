@@ -1,0 +1,82 @@
+<!-- ******************************************************************* -->
+<!-- *                                                                 * -->
+<!-- *  base.html                                                      * -->
+<!-- *  (c)2014 Jorge Marcos Fernandez                                 * -->
+<!-- *                                                                 * -->
+<!-- *  Description: JMFDjangoUTad Project                             * -->
+<!-- *               Base HTML Template File                           * -->
+<!-- *               Practica Asignatura Backend de U-Tad              * -->
+<!-- *               www.u-tad.com                                     * -->
+<!-- *                                                                 * -->
+<!-- *  Author:      Jorge Marcos Fernandez                            * -->
+<!-- *                                                                 * -->
+<!-- ******************************************************************* -->
+<!DOCTYPE html>
+<html>
+
+    <!-- *************************************************************** -->
+    <!-- *                                                             * -->
+    <!-- *                                                             * -->
+    <!-- * Head                                                        * -->
+    <!-- *                                                             * -->
+    <!-- *                                                             * -->
+    <!-- *************************************************************** -->
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+        <link rel="stylesheet" type="text/css" href="/static/admin/css/changelists.css" />
+
+    </head>
+
+    <!-- *************************************************************** -->
+    <!-- *                                                             * -->
+    <!-- *                                                             * -->
+    <!-- * Body                                                        * -->
+    <!-- *                                                             * -->
+    <!-- *                                                             * -->
+    <!-- *************************************************************** -->
+    <body class="change-list">
+
+        <!-- *********************************************************** -->
+        <!-- *                                                         * -->
+        <!-- * Container                                               * -->
+        <!-- *                                                         * -->
+        <!-- *********************************************************** -->
+        <div id="container">
+
+            <!-- ******************************************************* -->
+            <!-- * Header                                              * -->
+            <!-- ******************************************************* -->
+            <div id="header">
+                <div id="branding">
+                    <h1 id="site-name">JMF Django Practice for U-Tad</h1>
+                </div>
+                <div id="user-tools">
+                    {% if RequestUser.is_authenticated %}
+                         Welcome, <strong>{{ RequestUser.username }}</strong>.
+                         <a href="/admin/password_change/">Change password</a> /
+                         <a href="/logout/">Log out</a>
+                    {% else %}
+                         <a href="/login/">Log in</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- ******************************************************* -->
+            <!-- * Content                                             * -->
+            <!-- ******************************************************* -->
+            {% block content %}{% endblock %}
+
+            <!-- ******************************************************* -->
+            <!-- * Footer                                              * -->
+            <!-- ******************************************************* -->
+            {% block footer %}
+            <hr>
+            <p style="footer;margin-left:15px;"><i>(c)2014 Jorge Marcos Fernández</i></p>
+            {% endblock %}
+
+        </div>
+    </body>
+
+</html>

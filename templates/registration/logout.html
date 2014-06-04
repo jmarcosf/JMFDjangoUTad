@@ -1,0 +1,40 @@
+<!-- ******************************************************************* -->
+<!-- *                                                                 * -->
+<!-- *  logout.html                                                    * -->
+<!-- *  (c)2014 Jorge Marcos Fernandez                                 * -->
+<!-- *                                                                 * -->
+<!-- *  Description: JMFDjangoUTad Project                             * -->
+<!-- *               Logout HTML Template File                         * -->
+<!-- *               Practica Asignatura Backend de U-Tad              * -->
+<!-- *               www.u-tad.com                                     * -->
+<!-- *                                                                 * -->
+<!-- *  Author:      Jorge Marcos Fernandez                            * -->
+<!-- *                                                                 * -->
+<!-- ******************************************************************* -->
+{% extends "base.html" %}
+
+<!-- ******************************************************************* -->
+<!-- *                                                                 * -->
+<!-- *                                                                 * -->
+<!-- * Title Block                                                     * -->
+<!-- *                                                                 * -->
+<!-- *                                                                 * -->
+<!-- ******************************************************************* -->
+{% block title %}Logged Out{% endblock %}
+
+<!-- ******************************************************************* -->
+<!-- *                                                                 * -->
+<!-- *                                                                 * -->
+<!-- * Content Block                                                   * -->
+<!-- *                                                                 * -->
+<!-- *                                                                 * -->
+<!-- ******************************************************************* -->
+{% block content %}
+    <div id="content" class="colM">
+        <h1>Logged out</h1>
+        <p>Thanks for visiting us. Come back soon.</p>
+        <p><a href="/login/">Log in again</a></p>
+        <br class="clear" />
+    </div>
+{% endblock %}
+
