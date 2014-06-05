@@ -18,7 +18,9 @@ from django.contrib.auth.models import User
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
+#*                                                                        *#
 #* Picture Model Class                                                    *#
+#*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#
@@ -27,8 +29,8 @@ class Picture( models.Model ):
     url                 = models.URLField()
     title               = models.CharField( max_length = 50 )
     description         = models.CharField( max_length = 300 )
-    latitude            = models.FloatField( null = True, blank = True )
-    longitude           = models.FloatField( null = True, blank = True )
+    latitude            = models.FloatField()
+    longitude           = models.FloatField()
     isPublic            = models.BooleanField( verbose_name = 'Public?' )
     creationDate        = models.DateTimeField( auto_now_add = True, verbose_name="Creation Date" )
     modificationDate    = models.DateTimeField( auto_now_add = True, verbose_name="Modification Date" )
@@ -42,13 +44,12 @@ class Picture( models.Model ):
     class Meta:
         ordering = ['title']
 
-
-
-
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
+#*                                                                        *#
 #* RegisterUser Model Class                                               *#
+#*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#

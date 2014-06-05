@@ -12,22 +12,22 @@
 #* Author:      Jorge Marcos Fernandez                                    *#
 #*                                                                        *#
 #**************************************************************************#
-from django.http import Http404
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
 from rest_framework import generics
-from models import Picture
 from Pictures.serializers import *
+from Pictures.permissions import *
 
 #**************************************************************************#
+#*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
 #* Picture List and Create End Point View Class                           *#
 #*                                                                        *#
 #*                                                                        *#
+#*                                                                        *#
 #**************************************************************************#
-class PictureList( APIView ):
+class PictureList( generics.ListCreateAPIView ):
+
+    permission_classes = ( CanListOrCreate, )
 
     #**********************************************************************#
     #*                                                                    *#
@@ -35,119 +35,59 @@ class PictureList( APIView ):
     #*                                                                    *#
     #**********************************************************************#
     def pre_save( self, obj ):
-        obj.owner = self.request.user
+        obj.user = self.request.user
 
     #**********************************************************************#
     #*                                                                    *#
-    #* GET (List) Method                                                  *#
+    #* PictureList.get_queryset()                                         *#
     #*                                                                    *#
     #**********************************************************************#
-    def get( self, request, format = None ):
-        if request.user.is_authenticated():
-            PictureList = Picture.objects.filter( user = request.user )
-            serializer = PictureUserSerializer( PictureList, many = True )
-        else:
-            PictureList = Picture.objects.filter( isPublic = True )
-            serializer = PicturePublicSerializer( PictureList, many = True )
+    def get_queryset( self ):
+        if self.request.method == 'GET':
+            if self.request.user.is_authenticated():
+                PictureList = Picture.objects.filter( user = self.request.user )
+            else:
+                PictureList = Picture.objects.filter( isPublic = True )
+            return PictureList
 
-        return Response( serializer.data )
+        return Picture.objects.all()
 
     #**********************************************************************#
     #*                                                                    *#
-    #* POST (Create) Method                                               *#
+    #* PictureList.get_serializer_class()                                 *#
     #*                                                                    *#
     #**********************************************************************#
-    def post( self, request, format = None):
-        if not request.user.is_authenticated():
-            return Response( status = status.HTTP_401_UNAUTHORIZED )
+    def get_serializer_class( self ):
+        if self.request.method == 'GET':
+            if self.request.user.is_authenticated():
+                Serializer = PictureUserSerializer
+            else:
+                Serializer = PicturePublicSerializer
+            return Serializer
 
-        serializer = PictureDetailsSerializer( data = request.DATA )
-        if serializer.is_valid():
-            serializer.save()
-            return Response( serializer.data, status = status.HTTP_201_CREATED )
-        return Response( serializer.errors, status = status.HTTP_400_BAD_REQUEST )
+        return PictureDetailsSerializer
 
 #**************************************************************************#
+#*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
 #* Picture Retrieve, Update and Destroy End Point View Class              *#
 #*                                                                        *#
 #*                                                                        *#
+#*                                                                        *#
 #**************************************************************************#
-class PictureDetail( APIView ):
+class PictureDetail( generics.RetrieveUpdateDestroyAPIView ):
 
-    #**********************************************************************#
-    #*                                                                    *#
-    #* PictureList.pre_save()                                             *#
-    #*                                                                    *#
-    #**********************************************************************#
-    def pre_save( self, obj ):
-        obj.owner = self.request.user
-
-    #**********************************************************************#
-    #*                                                                    *#
-    #* PictureDetail.get_object()                                         *#
-    #*                                                                    *#
-    #**********************************************************************#
-    def get_object( self, pk ):
-        try:
-            return Picture.objects.get( pk = pk )
-        except Picture.DoesNotExist:
-            raise Http404
-
-    #**********************************************************************#
-    #*                                                                    *#
-    #* GET (Retrieve) Method                                              *#
-    #*                                                                    *#
-    #**********************************************************************#
-    def get( self, request, pk, format = None ):
-        picture = self.get_object( pk )
-        if picture.isPublic == True or request.user == picture.user:
-            serializer = PictureDetailsSerializer( picture )
-        else:
-            serializer = PicturePublicSerializer( picture )
-
-        return Response( serializer.data )
-
-    #**********************************************************************#
-    #*                                                                    *#
-    #* PUT (Update) Method                                                *#
-    #*                                                                    *#
-    #**********************************************************************#
-    def put( self, request, pk, format = None ):
-        if not request.user.is_authenticated():
-            return Response( status = status.HTTP_401_UNAUTHORIZED )
-
-        picture = self.get_object( pk )
-        if not request.user == picture.user and not request.user.is_superuser:
-            return Response( status = status.HTTP_401_UNAUTHORIZED )
-
-        serializer = PictureDetailsSerializer( picture, data = request.DATA )
-        if serializer.is_valid():
-            serializer.save()
-            return Response( serializer.data )
-        return Response( serializer.errors, status = status.HTTP_400_BAD_REQUEST )
-
-    #**********************************************************************#
-    #*                                                                    *#
-    #* DELETE (Destroy) Method                                            *#
-    #*                                                                    *#
-    #**********************************************************************#
-    def delete( self, request, pk, format = None ):
-        if not request.user.is_authenticated():
-            return Response( status = status.HTTP_401_UNAUTHORIZED )
-
-        picture = self.get_object( pk )
-        if not request.user == picture.user and not request.user.is_superuser:
-            return Response( status = status.HTTP_401_UNAUTHORIZED )
-
-        picture.delete()
-        return Response( status = status.HTTP_204_NO_CONTENT )
+    queryset = Picture.objects.all()
+    serializer_class = PictureDetailsSerializer
+    permission_classes = ( CanRetrieveUpdateOrDelete, )
 
 #**************************************************************************#
+#*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
 #* User List End Point View Class                                         *#
+#*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#
@@ -155,11 +95,12 @@ class UserList( generics.ListAPIView ):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
+#*                                                                        *#
 #* User Retrieve End Point View Class                                     *#
+#*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#

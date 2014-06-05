@@ -15,6 +15,15 @@
 from django.contrib import admin
 from models import Picture
 
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#* PictureAdmin Class                                                     *#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
 class PictureAdmin( admin.ModelAdmin ):
     list_display    = ( 'user', 'title', 'url', 'coordinates', 'modificationDate', 'isPublic' )
     list_filter     = ( 'modificationDate', )
@@ -38,5 +47,12 @@ class PictureAdmin( admin.ModelAdmin ):
 
     coordinates.admin_order_field = 'latitude'
 
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#* Picture Admin Register                                                 *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
 admin.site.register( Picture, PictureAdmin )
 

@@ -1,53 +1,68 @@
 # -*- coding: utf-8 -*-
 #**************************************************************************#
 #*                                                                        *#
-#* urls.py                                                                *#
+#* permissions.py                                                         *#
 #* (c)2014 Jorge Marcos Fernandez                                         *#
 #*                                                                        *#
 #* Description: JMFDjangoUTad Project                                     *#
-#*              Project URL's File                                        *#
+#*              Pictures REST Api End Point Permissions File              *#
 #*              Practica Asignatura Backend de U-Tad                      *#
 #*              www.u-tad.com                                             *#
 #*                                                                        *#
 #* Author:      Jorge Marcos Fernandez                                    *#
 #*                                                                        *#
 #**************************************************************************#
-from django.conf.urls import patterns, include, url
-from django.contrib import admin
-from django.contrib.auth.views import login
-from Pictures.api import PictureList
-
-#**************************************************************************#
-#*                                                                        *#
-#*                                                                        *#
-#* Auto Admin Discover option                                             *#
-#*                                                                        *#
-#*                                                                        *#
-#**************************************************************************#
-admin.autodiscover()
+from rest_framework import permissions
 
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
-#* Project URL Patterns                                                   *#
+#* CanListOrCreate Permission Class                                       *#
 #*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#
-urlpatterns = patterns\
-(   '',
+class CanListOrCreate( permissions.BasePermission ):
 
-    #Pictures Web End Points
-    url( r'^$', login ),
-    url( r'^login/$', login ),
-    url( r'^logout/$', 'Pictures.views.Logout' ),
-    url( r'^pictures/(?P<urlUserName>.+)', 'Pictures.views.UserPublicPictures' ),
-    url( r'^pictures/', 'Pictures.views.PictureList' ),
+    #**********************************************************************#
+    #*                                                                    *#
+    #* CanListOrCreate.has_permission()                                   *#
+    #*                                                                    *#
+    #**********************************************************************#
+    def has_permission( self, request, view ):
 
-    #Admin End Points
-    url( r'^admin/', include( admin.site.urls ) ),
+        if request.method in permissions.SAFE_METHODS:
+            return True
 
-    #Api REST End Points
-    url(r'^', include( 'Pictures.urls' ) ),
-)
+        if request.method == 'GET':
+            return True
+
+        return request.user.is_authenticated()
+
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#* CanRetrieveUpdateOrDelete Permission Class                             *#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+class CanRetrieveUpdateOrDelete( permissions.BasePermission ):
+
+    #**********************************************************************#
+    #*                                                                    *#
+    #* CanRetrieveUpdateOrDelete.has_object_permission()                  *#
+    #*                                                                    *#
+    #**********************************************************************#
+    def has_object_permission(self, request, view, obj):
+
+        if request.method == 'GET' and obj.isPublic == True:
+            return True
+
+        if request.user.is_authenticated():
+            if ( request.user == obj.user or request.user.is_superuser ):
+                return True
+
+        return False
