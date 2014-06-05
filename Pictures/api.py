@@ -16,6 +16,7 @@ from django.http import Http404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework import generics
 from models import Picture
 from Pictures.serializers import *
 
@@ -27,6 +28,14 @@ from Pictures.serializers import *
 #*                                                                        *#
 #**************************************************************************#
 class PictureList( APIView ):
+
+    #**********************************************************************#
+    #*                                                                    *#
+    #* PictureList.pre_save()                                             *#
+    #*                                                                    *#
+    #**********************************************************************#
+    def pre_save( self, obj ):
+        obj.owner = self.request.user
 
     #**********************************************************************#
     #*                                                                    *#
@@ -67,6 +76,19 @@ class PictureList( APIView ):
 #**************************************************************************#
 class PictureDetail( APIView ):
 
+    #**********************************************************************#
+    #*                                                                    *#
+    #* PictureList.pre_save()                                             *#
+    #*                                                                    *#
+    #**********************************************************************#
+    def pre_save( self, obj ):
+        obj.owner = self.request.user
+
+    #**********************************************************************#
+    #*                                                                    *#
+    #* PictureDetail.get_object()                                         *#
+    #*                                                                    *#
+    #**********************************************************************#
     def get_object( self, pk ):
         try:
             return Picture.objects.get( pk = pk )
@@ -122,3 +144,25 @@ class PictureDetail( APIView ):
         picture.delete()
         return Response( status = status.HTTP_204_NO_CONTENT )
 
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#* User List End Point View Class                                         *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+class UserList( generics.ListAPIView ):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#* User Retrieve End Point View Class                                     *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+class UserDetail( generics.RetrieveAPIView ):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

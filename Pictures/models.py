@@ -23,7 +23,7 @@ from django.contrib.auth.models import User
 #*                                                                        *#
 #**************************************************************************#
 class Picture( models.Model ):
-    user                = models.ForeignKey( User )
+    user                = models.ForeignKey( User, related_name = 'pictures' )
     url                 = models.URLField()
     title               = models.CharField( max_length = 50 )
     description         = models.CharField( max_length = 300 )

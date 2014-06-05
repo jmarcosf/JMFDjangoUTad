@@ -13,6 +13,7 @@
 #*                                                                        *#
 #**************************************************************************#
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from models import Picture
 
 #**************************************************************************#
@@ -23,10 +24,11 @@ from models import Picture
 #*                                                                        *#
 #**************************************************************************#
 class PicturePublicSerializer( serializers.ModelSerializer ):
+    owner = serializers.Field( source = 'user.username' )
+
     class Meta:
         model = Picture
-
-        fields = ( 'title', 'url' )
+        fields = ( 'title', 'url', 'owner' )
 
 #**************************************************************************#
 #*                                                                        *#
@@ -36,9 +38,9 @@ class PicturePublicSerializer( serializers.ModelSerializer ):
 #*                                                                        *#
 #**************************************************************************#
 class PictureUserSerializer( serializers.ModelSerializer ):
+
     class Meta:
         model = Picture
-
         fields = ( 'title', 'url', 'isPublic' )
 
 #**************************************************************************#
@@ -49,11 +51,24 @@ class PictureUserSerializer( serializers.ModelSerializer ):
 #*                                                                        *#
 #**************************************************************************#
 class PictureDetailsSerializer( serializers.ModelSerializer ):
+
     class Meta:
         model = Picture
-
         fields =\
         (
             'id', 'url', 'title', 'description', 'latitude', 'longitude',
             'isPublic', 'creationDate', 'modificationDate'
         )
+
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#* UserSerializer Class                                                   *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+class UserSerializer( serializers.ModelSerializer ):
+
+    class Meta:
+        model = User
+        fields = ( 'id', 'username', 'pictures' )
