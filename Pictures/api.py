@@ -12,7 +12,12 @@
 #* Author:      Jorge Marcos Fernandez                                    *#
 #*                                                                        *#
 #**************************************************************************#
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import  make_password
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
 from Pictures.serializers import *
 from Pictures.permissions import *
 
@@ -107,3 +112,46 @@ class UserList( generics.ListAPIView ):
 class UserDetail( generics.RetrieveAPIView ):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#* User Sign Up End Point View Class                                      *#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+class SignUp( APIView ):
+
+    #**********************************************************************#
+    #*                                                                    *#
+    #* SignUp.post()                                                      *#
+    #*                                                                    *#
+    #**********************************************************************#
+    def post( self, request ):
+
+        user_already_exists = unicode( '{&quot;username&quot; : &quot;already exists&quot;}', 'utf-8' )
+        password_dont_match = unicode( '{&quot;password&quot; : &quot;password and password_confirm do not match&quot;}', 'utf-8' )
+
+        serializer = UserSignUpSerializer( data = request.DATA )
+        if serializer.is_valid():
+            new_user = serializer.object
+            if new_user.password != new_user.password_confirm:
+                return Response( password_dont_match, status = status.HTTP_400_BAD_REQUEST )
+            try:
+                user = User.objects.get( username = new_user.username )
+                return Response( user_already_exists, status = status.HTTP_400_BAD_REQUEST )
+            except User.DoesNotExist:
+                pass
+
+            new_django_user             = User()
+            new_django_user.first_name  = new_user.first_name
+            new_django_user.last_name   = new_user.last_name
+            new_django_user.username    = new_user.username
+            new_django_user.email       = new_user.email
+            new_django_user.password    = make_password( new_user.password )
+            new_django_user.save()
+            return Response( serializer.data )
+        else:
+            return Response( serializer.errors, status = status.HTTP_400_BAD_REQUEST )

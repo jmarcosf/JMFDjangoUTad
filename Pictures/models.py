@@ -48,12 +48,12 @@ class Picture( models.Model ):
 #*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
-#* RegisterUser Model Class                                               *#
+#* UserSignUp Model Class                                                 *#
 #*                                                                        *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#
-class RegisterUser( object ):
+class UserSignUp( object ):
 
     def __init__( self, *args, **kwargs ):
         self.first_name         = kwargs.get( 'first_name', None )
@@ -62,6 +62,3 @@ class RegisterUser( object ):
         self.email              = kwargs.get( 'email', None )
         self.password           = kwargs.get( 'password', None )
         self.password_confirm   = kwargs.get( 'password_confirm', None )
-
-
-

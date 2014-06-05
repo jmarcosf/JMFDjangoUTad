@@ -35,6 +35,7 @@ urlpatterns = patterns\
     url( r'^api/users/(?P<pk>[0-9]+)/$', UserDetail.as_view() ),
 
     url( r'^api/login/', include('rest_framework.urls', namespace = 'rest_framework' ) ),
+    url( r'^api/signup/', SignUp.as_view() ),
 )
 
 urlpatterns = format_suffix_patterns( urlpatterns )

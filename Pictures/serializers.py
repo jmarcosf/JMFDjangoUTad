@@ -12,9 +12,9 @@
 #* Author:      Jorge Marcos Fernandez                                    *#
 #*                                                                        *#
 #**************************************************************************#
-from rest_framework import serializers
 from django.contrib.auth.models import User
-from models import Picture
+from rest_framework import serializers
+from models import Picture, UserSignUp
 
 #**************************************************************************#
 #*                                                                        *#
@@ -80,3 +80,46 @@ class UserSerializer( serializers.ModelSerializer ):
     class Meta:
         model = User
         fields = ( 'id', 'username', 'pictures' )
+
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#* UserSignUpSerializer Class                                             *#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+class UserSignUpSerializer( serializers.Serializer ):
+
+    first_name          = serializers.CharField()
+    last_name           = serializers.CharField()
+    username            = serializers.CharField()
+    email               = serializers.EmailField()
+    password            = serializers.CharField()
+    password_confirm    = serializers.CharField()
+
+    #**********************************************************************#
+    #*                                                                    *#
+    #* UserSignUpSerializer.restore_object()                              *#
+    #*                                                                    *#
+    #**********************************************************************#
+    def restore_object( self, attrs, instance = None ):
+
+        if instance is None:
+            obj                         = UserSignUp()
+            obj.first_name              = attrs.get( 'first_name', None )
+            obj.last_name               = attrs.get( 'last_name', None )
+            obj.username                = attrs.get( 'username', None )
+            obj.email                   = attrs.get( 'email', None )
+            obj.password                = attrs.get( 'password', None )
+            obj.password_confirm        = attrs.get( 'password_confirm', None )
+            return obj
+        else:
+            instance.first_name         = attrs.get( 'first_name', instance.first_name )
+            instance.last_name          = attrs.get( 'last_name', instance.last_name )
+            instance.username           = attrs.get( 'username', instance.username )
+            instance.email              = attrs.get( 'email', instance.email )
+            instance.password           = attrs.get( 'password', instance.password )
+            instance.password_confirm   = attrs.get( 'password_confirm', instance.password_confirm )
+            return instance
