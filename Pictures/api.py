@@ -28,6 +28,11 @@ from Pictures.serializers import *
 #**************************************************************************#
 class PictureList( APIView ):
 
+    #**********************************************************************#
+    #*                                                                    *#
+    #* GET (List) Method                                                  *#
+    #*                                                                    *#
+    #**********************************************************************#
     def get( self, request, format = None ):
         if request.user.is_authenticated():
             PictureList = Picture.objects.filter( user = request.user )
@@ -38,7 +43,15 @@ class PictureList( APIView ):
 
         return Response( serializer.data )
 
+    #**********************************************************************#
+    #*                                                                    *#
+    #* POST (Create) Method                                               *#
+    #*                                                                    *#
+    #**********************************************************************#
     def post( self, request, format = None):
+        if not request.user.is_authenticated():
+            return Response( status = status.HTTP_401_UNAUTHORIZED )
+
         serializer = PictureDetailsSerializer( data = request.DATA )
         if serializer.is_valid():
             serializer.save()
@@ -48,7 +61,7 @@ class PictureList( APIView ):
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
-#* Picture Retrieve, Update and Delete End Point View Class               *#
+#* Picture Retrieve, Update and Destroy End Point View Class              *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#
@@ -60,6 +73,11 @@ class PictureDetail( APIView ):
         except Picture.DoesNotExist:
             raise Http404
 
+    #**********************************************************************#
+    #*                                                                    *#
+    #* GET (Retrieve) Method                                              *#
+    #*                                                                    *#
+    #**********************************************************************#
     def get( self, request, pk, format = None ):
         picture = self.get_object( pk )
         if picture.isPublic == True or request.user == picture.user:
@@ -69,25 +87,38 @@ class PictureDetail( APIView ):
 
         return Response( serializer.data )
 
+    #**********************************************************************#
+    #*                                                                    *#
+    #* PUT (Update) Method                                                *#
+    #*                                                                    *#
+    #**********************************************************************#
     def put( self, request, pk, format = None ):
-        snippet = self.get_object( pk )
-        serializer = PictureDetailsSerializer( snippet, data = request.DATA )
+        if not request.user.is_authenticated():
+            return Response( status = status.HTTP_401_UNAUTHORIZED )
+
+        picture = self.get_object( pk )
+        if not request.user == picture.user and not request.user.is_superuser:
+            return Response( status = status.HTTP_401_UNAUTHORIZED )
+
+        serializer = PictureDetailsSerializer( picture, data = request.DATA )
         if serializer.is_valid():
             serializer.save()
             return Response( serializer.data )
         return Response( serializer.errors, status = status.HTTP_400_BAD_REQUEST )
 
+    #**********************************************************************#
+    #*                                                                    *#
+    #* DELETE (Destroy) Method                                            *#
+    #*                                                                    *#
+    #**********************************************************************#
     def delete( self, request, pk, format = None ):
-        snippet = self.get_object( pk )
-        snippet.delete()
+        if not request.user.is_authenticated():
+            return Response( status = status.HTTP_401_UNAUTHORIZED )
+
+        picture = self.get_object( pk )
+        if not request.user == picture.user and not request.user.is_superuser:
+            return Response( status = status.HTTP_401_UNAUTHORIZED )
+
+        picture.delete()
         return Response( status = status.HTTP_204_NO_CONTENT )
-
-
-
-
-
-
-
-
-
 
