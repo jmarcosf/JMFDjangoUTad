@@ -47,6 +47,5 @@ urlpatterns = patterns\
     url( r'^admin/', include( admin.site.urls ) ),
 
     #Api REST End Points
-    url( r'^api/pictures/', PictureList.as_view() ),
-
+    url(r'^', include( 'Pictures.urls' ) ),
 )

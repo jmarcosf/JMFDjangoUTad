@@ -18,36 +18,42 @@ from models import Picture
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
-#* PublicPictureSerializer Class                                          *#
+#* PicturePublicSerializer Class                                          *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#
-class PublicPictureSerializer( serializers.ModelSerializer ):
+class PicturePublicSerializer( serializers.ModelSerializer ):
     class Meta:
         model = Picture
-        fields = ( 'id', 'title', 'url' )
+
+        fields = ( 'title', 'url' )
 
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
-#* UserPictureSerializer Class                                            *#
+#* PictureUserSerializer Class                                            *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#
-class UserPictureSerializer( serializers.ModelSerializer ):
+class PictureUserSerializer( serializers.ModelSerializer ):
     class Meta:
         model = Picture
-        fields = ( 'id', 'title', 'url', 'isPublic' )
+
+        fields = ( 'title', 'url', 'isPublic' )
 
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
-#* NewPictureSerializer Class                                             *#
+#* PictureDetailsSerializer Class                                         *#
 #*                                                                        *#
 #*                                                                        *#
 #**************************************************************************#
-class NewPictureSerializer( serializers.ModelSerializer ):
+class PictureDetailsSerializer( serializers.ModelSerializer ):
     class Meta:
         model = Picture
-        fields = ( 'user', 'title', 'url', 'description', 'latitude', 'longitude', 'isPublic', )
 
+        fields =\
+        (
+            'id', 'url', 'title', 'description', 'latitude', 'longitude',
+            'isPublic', 'creationDate', 'modificationDate'
+        )
