@@ -13,5 +13,31 @@
 #*                                                                        *#
 #**************************************************************************#
 from django.contrib import admin
+from models import Image
 
-# Register your models here.
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#* ImageAdmin Class                                                       *#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+class ImageAdmin( admin.ModelAdmin ):
+    list_display    = ( 'user', 'imageUrl' )
+    list_filter     = ( 'creationDate', )
+    search_fields   = ( 'imageUrl', 'creationDate' )
+    ordering        = ( '-creationDate', )
+    readonly_fields = ( 'creationDate', )
+
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#* Image Admin Register                                                   *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+admin.site.register( Image, ImageAdmin )
+
+

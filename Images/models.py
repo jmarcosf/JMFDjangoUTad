@@ -26,9 +26,9 @@ from django.contrib.auth.models import User
 #**************************************************************************#
 class Image( models.Model ):
     user                = models.ForeignKey( User, related_name = 'images' )
-    url                 = models.URLField()
-    creationDate        = models.DateTimeField( auto_now_add = True, verbose_name="Creation Date" )
+    imageUrl            = models.ImageField( upload_to = 'uploads', verbose_name = 'Image Location Url' )
+    creationDate        = models.DateTimeField( auto_now_add = True, verbose_name = 'Creation Date' )
 
     def __unicode__( self ):
-        return self.url
+        return unicode( self.imageUrl )
 

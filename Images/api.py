@@ -14,8 +14,9 @@
 #**************************************************************************#
 from rest_framework import generics
 from rest_framework import permissions
+from rest_framework.parsers import FileUploadParser
 from Images.models import Image
-from Images.serializers import *
+from Images.serializers import ImageSerializer
 
 #**************************************************************************#
 #*                                                                        *#
@@ -30,7 +31,8 @@ class ImageCreate( generics.CreateAPIView ):
 
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = ( permissions.IsAuthenticated, )
+    parser_classes = ( FileUploadParser, )
 
     #**********************************************************************#
     #*                                                                    *#
@@ -40,3 +42,16 @@ class ImageCreate( generics.CreateAPIView ):
     def pre_save( self, obj ):
         obj.user = self.request.user
 
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#* Image Retrieve End Point View Class                                    *#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+class ImageShow( generics.RetrieveAPIView ):
+
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer

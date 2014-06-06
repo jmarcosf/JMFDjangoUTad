@@ -32,8 +32,8 @@ class Picture( models.Model ):
     latitude            = models.FloatField()
     longitude           = models.FloatField()
     isPublic            = models.BooleanField( verbose_name = 'Public?' )
-    creationDate        = models.DateTimeField( auto_now_add = True, verbose_name="Creation Date" )
-    modificationDate    = models.DateTimeField( auto_now_add = True, verbose_name="Modification Date" )
+    creationDate        = models.DateTimeField( auto_now_add = True, verbose_name = 'Creation Date' )
+    modificationDate    = models.DateTimeField( auto_now_add = True, verbose_name = 'Modification Date' )
 
     def __unicode__( self ):
         return self.title

@@ -30,7 +30,7 @@ class ImageSerializer( serializers.ModelSerializer ):
 
     class Meta:
         model = Image
-        fields = ( 'url', 'owner' )
+        fields = ( 'imageUrl', 'owner' )
 
 
 
