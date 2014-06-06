@@ -55,3 +55,7 @@ class ImageShow( generics.RetrieveAPIView ):
 
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
+    lookup_field = 'imageUrl'
+
+    def get_queryset( self ):
+        return Image.objects.all()

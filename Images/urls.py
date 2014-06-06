@@ -29,7 +29,8 @@ urlpatterns = patterns\
 (
     'Pictures.api.views',
     url( r'^api/images/$', ImageCreate.as_view() ),
-    url( r'^api/images/(?P<pk>[0-9]+)/$', ImageShow.as_view() ),
+#   url( r'^api/images/(?P<pk>[0-9]+)/$', ImageShow.as_view() ),
+    url( r'^api/images/(?P<imageUrl>.+)/$', ImageShow.as_view() ),
 )
 
 urlpatterns = format_suffix_patterns( urlpatterns )

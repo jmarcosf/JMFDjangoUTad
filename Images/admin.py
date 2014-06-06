@@ -25,7 +25,7 @@ from models import Image
 #*                                                                        *#
 #**************************************************************************#
 class ImageAdmin( admin.ModelAdmin ):
-    list_display    = ( 'user', 'imageUrl' )
+    list_display    = ( 'user', 'imageUrl', 'creationDate' )
     list_filter     = ( 'creationDate', )
     search_fields   = ( 'imageUrl', 'creationDate' )
     ordering        = ( '-creationDate', )
