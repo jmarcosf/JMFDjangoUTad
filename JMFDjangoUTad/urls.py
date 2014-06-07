@@ -44,6 +44,8 @@ urlpatterns = patterns\
     url( r'^pictures/(?P<urlUserName>.+)', 'Pictures.views.UserPublicPictures' ),
     url( r'^pictures/', 'Pictures.views.PictureList' ),
 
+    url( r'^images/(?P<imageName>.+)', 'Images.views.ShowImage' ),
+
     #Admin End Points
     url( r'^admin/', include( admin.site.urls ) ),
 

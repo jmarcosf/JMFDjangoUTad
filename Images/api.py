@@ -41,21 +41,3 @@ class ImageCreate( generics.CreateAPIView ):
     #**********************************************************************#
     def pre_save( self, obj ):
         obj.user = self.request.user
-
-#**************************************************************************#
-#*                                                                        *#
-#*                                                                        *#
-#*                                                                        *#
-#* Image Retrieve End Point View Class                                    *#
-#*                                                                        *#
-#*                                                                        *#
-#*                                                                        *#
-#**************************************************************************#
-class ImageShow( generics.RetrieveAPIView ):
-
-    queryset = Image.objects.all()
-    serializer_class = ImageSerializer
-    lookup_field = 'imageUrl'
-
-    def get_queryset( self ):
-        return Image.objects.all()

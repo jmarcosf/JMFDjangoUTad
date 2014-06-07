@@ -116,6 +116,10 @@ USE_TZ = True
 #*                                                                        *#
 #**************************************************************************#
 STATIC_URL = '/static/'
+STATICFILES_DIRS =\
+(
+    os.path.join( BASE_DIR, 'media/' ),
+)
 
 #**************************************************************************#
 #*                                                                        *#
@@ -125,7 +129,7 @@ STATIC_URL = '/static/'
 #*                                                                        *#
 #**************************************************************************#
 MEDIA_ROOT = os.path.join( BASE_DIR, 'media' )
-MEDIA_URL = 'http://media.example.com/'
+MEDIA_URL = 'http://127.0.0.1:8000/' #Change this for something like http://www.example.com
 
 #**************************************************************************#
 #*                                                                        *#
@@ -136,7 +140,7 @@ MEDIA_URL = 'http://media.example.com/'
 #**************************************************************************#
 TEMPLATE_DIRS =\
 (
-    os.path.join( BASE_DIR,  'templates' ),
+    os.path.join( BASE_DIR, 'templates' ),
 )
 
 #**************************************************************************#

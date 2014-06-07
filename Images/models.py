@@ -26,7 +26,7 @@ from django.contrib.auth.models import User
 #**************************************************************************#
 class Image( models.Model ):
     user                = models.ForeignKey( User, related_name = 'images' )
-    imageUrl            = models.ImageField( upload_to = 'uploads', verbose_name = 'Image Location Url' )
+    imageUrl            = models.ImageField( upload_to = 'images', verbose_name = 'File Location' )
     creationDate        = models.DateTimeField( auto_now_add = True, verbose_name = 'Creation Date' )
 
     def __unicode__( self ):

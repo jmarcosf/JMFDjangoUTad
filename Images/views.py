@@ -13,5 +13,31 @@
 #*                                                                        *#
 #**************************************************************************#
 from django.shortcuts import render
+from django.http import Http404, HttpResponseServerError
+from models import Image
 
-# Create your views here.
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#* Show Image View                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+def ShowImage( request, imageName ):
+
+    ImageRequested = None
+
+    try:
+        ImageRequested = Image.objects.get( imageUrl__icontains = imageName )
+
+        context = { 'Image' : ImageRequested, }
+        return render( request, 'show_picture.html', context )
+
+    except Image.DoesNotExist:
+        raise Http404
+
+    except:
+        raise HttpResponseServerError
+

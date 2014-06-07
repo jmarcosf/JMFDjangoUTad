@@ -27,10 +27,11 @@ from models import Image
 #**************************************************************************#
 class ImageSerializer( serializers.ModelSerializer ):
     owner = serializers.Field( source = 'user.username' )
+    image_url = serializers.Field( source = 'imageUrl.url', label = 'ImageURL' )
 
     class Meta:
         model = Image
-        fields = ( 'imageUrl', 'owner' )
+        fields = ( 'imageUrl', 'owner', 'image_url' )
 
 
 

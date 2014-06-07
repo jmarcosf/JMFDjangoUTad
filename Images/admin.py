@@ -18,6 +18,18 @@ from models import Image
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
+#* Method to add local Image URI to Admin Image List                      *#
+#*                                                                        *#
+#*                                                                        *#
+#**************************************************************************#
+def ImageURI( obj ):
+    return obj.imageUrl.url
+
+ImageURI.short_description = 'Image Location URI'
+
+#**************************************************************************#
+#*                                                                        *#
+#*                                                                        *#
 #*                                                                        *#
 #* ImageAdmin Class                                                       *#
 #*                                                                        *#
@@ -25,7 +37,7 @@ from models import Image
 #*                                                                        *#
 #**************************************************************************#
 class ImageAdmin( admin.ModelAdmin ):
-    list_display    = ( 'user', 'imageUrl', 'creationDate' )
+    list_display    = ( 'user', 'imageUrl', ImageURI, 'creationDate' )
     list_filter     = ( 'creationDate', )
     search_fields   = ( 'imageUrl', 'creationDate' )
     ordering        = ( '-creationDate', )
