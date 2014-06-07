@@ -20,6 +20,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from Pictures.serializers import *
 from Pictures.permissions import *
+import datetime
 
 #**************************************************************************#
 #*                                                                        *#
@@ -87,6 +88,14 @@ class PictureDetail( generics.RetrieveUpdateDestroyAPIView ):
     serializer_class = PictureDetailsSerializer
     permission_classes = ( CanRetrieveUpdateOrDelete, )
 
+    #**********************************************************************#
+    #*                                                                    *#
+    #* PictureDetail.post_save()                                          *#
+    #*                                                                    *#
+    #**********************************************************************#
+    def post_save( self, obj, created = False ):
+        obj.modificationDate = datetime.datetime.now()
+
 #**************************************************************************#
 #*                                                                        *#
 #*                                                                        *#
@@ -132,6 +141,7 @@ class SignUp( APIView ):
     def post( self, request ):
 
         user_already_exists = unicode( '{&quot;username&quot; : &quot;already exists&quot;}', 'utf-8' )
+        email_already_exists = unicode( '{&quot;email&quot; : &quot;already exists&quot;}', 'utf-8' )
         password_dont_match = unicode( '{&quot;password&quot; : &quot;password and password_confirm do not match&quot;}', 'utf-8' )
 
         serializer = UserSignUpSerializer( data = request.DATA )
@@ -142,6 +152,12 @@ class SignUp( APIView ):
             try:
                 user = User.objects.get( username = new_user.username )
                 return Response( user_already_exists, status = status.HTTP_400_BAD_REQUEST )
+            except User.DoesNotExist:
+                pass
+
+            try:
+                user = User.objects.get( email = new_user.email )
+                return Response( email_already_exists, status = status.HTTP_400_BAD_REQUEST )
             except User.DoesNotExist:
                 pass
 

@@ -44,6 +44,7 @@ def PictureList( request ):
 
     PictureListContext =\
     {
+        'Request'           : request,
         'RequestUser'       : RequestUser,
         'PublicPictureList' : PublicPictureList,
         'OwnPictureList'    : OwnPictureList,
@@ -70,6 +71,7 @@ def UserPublicPictures( request, urlUserName ):
 
         context =\
         {
+            'Request'           : request,
             'RequestUser'       : RequestUser,
             'PublicPictureList' : PublicPictureList,
             'OwnPictureList'    : None,

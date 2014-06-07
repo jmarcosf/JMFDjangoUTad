@@ -53,8 +53,8 @@
                     <h1 id="site-name">JMF Django Practice for U-Tad</h1>
                 </div>
                 <div id="user-tools">
-                    {% if RequestUser.is_authenticated %}
-                         Welcome, <strong>{{ RequestUser.username }}</strong>.
+                    {% if Request.user.is_authenticated %}
+                         Welcome, <strong>{{ Request.user.username }}</strong>.
                          <a href="/admin/password_change/">Change password</a> /
                          <a href="/logout/">Log out</a>
                     {% else %}
